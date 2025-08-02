@@ -12,11 +12,11 @@ Boundary Geometry is stores in the res folder.
 
 # Usage
 
-In main select, which scene is supposed to be run.
+Simply run the pressure Solver App. This leads you to the dialoge where the config file can be selected.
 
-In Solver.h WCSPH or PBF can be selected. Dependent on the chosen solver the input parameters for the scene need to be adapted.
+The options for the config files are currently a bit limited. All possibilities can be seen in the existing example files.
 
-I am aware that this is not very userfriendly and may update in the future
+It is possible to add multiple fluid boxes or emitters. Currently only one boundary object is supported though. 
 
 # Visualizing the results
 
