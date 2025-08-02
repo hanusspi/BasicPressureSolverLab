@@ -4,18 +4,19 @@
 
 namespace pressureSolver
 {
+	// Enum for solver types
+	enum class SolverType {
+		WCSPH,
+		PBF
+	};
+
 	// DECLARATIONS ================================================================================
 	class Solver
 	{
-		//only select one
-		static constexpr bool USE_WCSPH = true;
-		static constexpr bool USE_PBF = false;
-
 	public:
 		/* Fields */
 		pbf::PositionBasedFluids pSolver;
 		wcsph::PositionBasedFluids wSolver;
-
 
 		double timing_cns = 0.0;
 		double timing_tns = 0.0;
@@ -24,6 +25,8 @@ namespace pressureSolver
 		/* Methods */
 		Solver() = default;
 		~Solver() = default;
+
+		void setSolverType(SolverType type);
 
 		void initialize(std::vector<Eigen::Vector3d>& fluid_positions,
 			std::vector<Eigen::Vector3d>& boundary_positions,
@@ -37,11 +40,19 @@ namespace pressureSolver
 			double fluid_mass,
 			double particle_diameter,
 			double dt,
-			double num_iterations);
+			double params);
+
 		void step(pressureSolver::NeighborhoodSearch& nsearch);
+
+	private:
+		SolverType m_solver_type = SolverType::WCSPH; // Default to WCSPH
 	};
 
 	// DEFINITIONS ================================================================================
+
+	inline void Solver::setSolverType(SolverType type) {
+		m_solver_type = type;
+	}
 
 	inline void Solver::initialize(std::vector<Eigen::Vector3d>& fluid_positions,
 		std::vector<Eigen::Vector3d>& boundary_positions,
@@ -57,7 +68,8 @@ namespace pressureSolver
 		double dt,
 		double params)
 	{
-		if constexpr (USE_PBF) {
+		switch (m_solver_type) {
+		case SolverType::PBF:
 			pSolver.initialize(fluid_positions,
 				boundary_positions,
 				velocities,
@@ -70,9 +82,9 @@ namespace pressureSolver
 				fluid_mass,
 				particle_diameter,
 				dt,
-				params);
-		}
-		if constexpr (USE_WCSPH) {
+				static_cast<int>(params)); // PBF expects num_iterations as int
+			break;
+		case SolverType::WCSPH:
 			wSolver.initialize(fluid_positions,
 				boundary_positions,
 				velocities,
@@ -85,18 +97,20 @@ namespace pressureSolver
 				fluid_mass,
 				particle_diameter,
 				dt,
-				params);
+				params); // WCSPH expects stiffness as double
+			break;
 		}
 	}
 
 	inline void Solver::step(pressureSolver::NeighborhoodSearch& nsearch)
 	{
-		if constexpr (USE_PBF) {
+		switch (m_solver_type) {
+		case SolverType::PBF:
 			pSolver.step(nsearch);
-		}
-		if constexpr (USE_WCSPH) {
+			break;
+		case SolverType::WCSPH:
 			wSolver.step(nsearch);
+			break;
 		}
 	}
-
 }

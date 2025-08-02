@@ -46,7 +46,7 @@ void EmitterRender::run() {
 	double beta = 0.1;
 	double gamma = 0.1;
 	pressureSolver::Simulator sim;
-	sim.setParams(particle_radius, export_path, rho_0, freq, fps, params, beta, gamma);
+	sim.setParams(pressureSolver::SolverType::PBF, particle_radius, export_path, rho_0, freq, fps, params, beta, gamma);
 	sim.setScene({box}, {}, boundary_path);
 
 	sim.run(iterations);

@@ -19,7 +19,8 @@ namespace pressureSolver
 		Simulator();
 		~Simulator();
 
-		void setParams(double particle_radius, std::string export_path, double rho_0, int freq, int fps, std::vector<double> params, double beta, double gamma);
+		void setParams(SolverType solver_type, double particle_radius, std::string export_path,
+			double rho_0, int freq, int fps, std::vector<double> params, double beta, double gamma);
 		void setScene(std::vector<Eigen::AlignedBox3d> boxes, std::vector<scene::EmitterSetting> emitters, std::string boundary_path);
 		void run(int iterations);
 	private:
@@ -28,6 +29,7 @@ namespace pressureSolver
 
 		Solver m_solver;
 		//scene::Scene m_scene;
+		SolverType m_solver_type = SolverType::WCSPH; // Default solver type
 		double m_particle_radius;
 		NeighborhoodSearch m_nsearch;
 		double m_particle_diameter;

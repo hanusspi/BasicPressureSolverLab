@@ -36,7 +36,7 @@ void DoubleDamBreak::run() {
 	double beta = 0.5;
 	double gamma = 0.5;
 	pressureSolver::Simulator sim;
-	sim.setParams(particle_radius, export_path, rho_0, freq, fps, params, beta, gamma);
+	sim.setParams(pressureSolver::SolverType::WCSPH, particle_radius, export_path, rho_0, freq, fps, params, beta, gamma);
 	sim.setScene(boxes, {}, boundary_path);
 
 	sim.run(iterations);

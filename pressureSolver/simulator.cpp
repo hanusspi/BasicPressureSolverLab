@@ -17,12 +17,18 @@ namespace pressureSolver
 	Simulator::~Simulator()
 	{
 	}
-	void Simulator::setParams(double particle_radius, std::string export_path, double rho_0, int freq, int fps, std::vector<double> params, double beta, double gamma)
+	void Simulator::setParams(SolverType solver_type, double particle_radius, std::string export_path,
+		double rho_0, int freq, int fps, std::vector<double> params, double beta, double gamma)
 	{
+		// Store the solver type
+		m_solver_type = solver_type;
+
+		// Configure the solver with the chosen type
+		m_solver.setSolverType(solver_type);
+
+		// Rest of the existing setParams implementation
 		m_particle_radius = particle_radius;
-		//m_boundary_path = boundary_path;
 		m_export_path = export_path;
-		//m_fluidbox = fluidbox;
 		m_rho_0 = rho_0;
 		m_freq = freq;
 		m_fps = fps;
@@ -40,9 +46,19 @@ namespace pressureSolver
 		m_gamma = gamma;
 		m_beta = beta;
 		kernel::c = m_compact_support;
-		kernel::a_coh = 32/(PI*pow(m_compact_support,9));
+		kernel::a_coh = 32 / (PI * pow(m_compact_support, 9));
 		kernel::a_adh = 0.007 / pow(m_compact_support, 3.25);
 		kernel::sub_coh = pow(kernel::c, 6) / 64;
+
+		// Print which solver is being used
+		switch (solver_type) {
+		case SolverType::WCSPH:
+			std::cout << "Using WCSPH solver with stiffness: " << params[0] << std::endl;
+			break;
+		case SolverType::PBF:
+			std::cout << "Using PBF solver with iterations: " << static_cast<int>(params[0]) << std::endl;
+			break;
+		}
 	}
 
 	void Simulator::setScene(std::vector<Eigen::AlignedBox3d> boxes, std::vector<scene::EmitterSetting> emitters, std::string boundary_path)
