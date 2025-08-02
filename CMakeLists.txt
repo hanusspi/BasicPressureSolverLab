@@ -23,3 +23,4 @@ add_subdirectory(app)
 
 # Copy res folder
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/res DESTINATION ${CMAKE_BINARY_DIR})
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/configs DESTINATION ${CMAKE_BINARY_DIR})

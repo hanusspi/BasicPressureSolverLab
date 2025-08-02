@@ -1,0 +1,24 @@
+{
+  "particle_radius": 0.005,
+  "boundary_path": "../res/box.obj",
+  "rho_0": 1000.0,
+  "freq": 5000,
+  "fps": 60,
+  "iterations": 2000,
+  "export_path": "../res/DoubleDamBreak/",
+  "solver_type": "WCSPH",
+  "solver_param": 1000.0,
+  "beta": 0.05,
+  "gamma": 0.05,
+  "fluid_boxes": [
+    {
+      "min": [-0.075, -0.1, -0.5],
+      "max": [0.075, 0.0, -0.4]
+    },
+    {
+      "min": [-0.055, -0.055, -0.5],
+      "max": [0.055, 0.055, -0.39]
+    }
+  ],
+  "emitters": []
+}
